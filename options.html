@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Autotask Alerts - Options</title>
+        <style>
+            body {
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                font-size: 14px;
+                line-height: 1.42857143;
+                color: #333;
+            }
+            table {
+                border-collapse: collapse;
+                border-spacing: 0;
+            }
+            
+            td {
+                vertical-align: top;
+                width: 100%;
+                padding: 0;
+            }
+            
+            label {
+                display: inline-block;
+                max-width: 100%;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+            
+            .clearfix::before {
+                content: " ";
+                display: table;
+            }
+            
+            .clearfix::after {
+                content: " ";
+                display: table;
+                clear: both;
+            }
+            
+            .field {
+                margin-left: 0;
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .field > * {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            
+            .form-control {
+                display: block;
+                width: 100%;
+                padding: 6px 12px;
+                font-size: 14px;
+                line-height: 1.42857143;
+                color: #555;
+                background-color: #fff;
+                background-image: none;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+                transition(border-color ease-in-out .15s, box-shadow ease-in-out .15s);
+            }
+            
+            ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+            
+            ul li {
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: flex-end;
+                gap: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <fieldset>
+            <legend>Select Workdays</legend>
+            <ul id="workdayList">
+                <li>
+                    <label>Sunday</label>
+                    <input type="checkbox" id="sundayCheckbox">
+                </li>
+                <li>
+                    <label>Monday</label>
+                    <input type="checkbox" id="mondayCheckbox">
+                </li>
+                <li>
+                    <label>Tuesday</label>
+                    <input type="checkbox" id="tuesdayCheckbox">
+                </li>
+                <li>
+                    <label>Wednesday</label>
+                    <input type="checkbox" id="wednesdayCheckbox">
+                </li>
+                <li>
+                    <label>Thursday</label>
+                    <input type="checkbox" id="thursdayCheckbox">
+                </li>
+                <li>
+                    <label>Friday</label>
+                    <input type="checkbox" id="fridayCheckbox">
+                </li>
+                <li>
+                    <label>Saturday</label>
+                    <input type="checkbox" id="saturdayCheckbox">
+                </li>
+            </ul>
+        </fieldset>
+        <table cellpadding="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="clearfix">
+                            <div class="field clearfix">
+                                <label>Starting Time</label>
+                                <div>
+                                    <span>
+                                        <input id="timeStart" type="time" class="form-control">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="clearfix">
+                            <div class="field clearfix">
+                                <label>Ending Time</label>
+                                <div>
+                                    <span>
+                                        <input id="timeEnd" type="time" class="form-control">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button id="saveTimes">Save Work Schedule</button>
+        <div id="saveTimesStatus"></div>
+        <table cellpadding="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="clearfix">
+                            <div class="field clearfix">
+                                <label>Integration Code</label>
+                                <div>
+                                    <span>
+                                        <input id="ApiIntegrationCode" class="form-control">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="clearfix">
+                            <div class="field clearfix">
+                                <label>Username</label>
+                                <div>
+                                    <span>
+                                        <input id="UserName" class="form-control">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="clearfix">
+                            <div class="field clearfix">
+                                <label>Secret</label>
+                                <div>
+                                    <span>
+                                        <input id="Secret" class="form-control">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button id="saveAPI">Save API Credentials</button>
+        <div id="saveAPIStatus"></div>
+        <fieldset>
+            <legend>Select Queues to Alert for</legend>
+            <ul id="queueList">
+                <li>Loading...</li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>Select Statuses to Alert for</legend>
+            <ul id="statusList">
+                <li>Loading...</li>
+            </ul>
+        </fieldset>
+        <button id="saveQueues" style="display: none;">Save Queue/Status Selection</button>
+        <div id="saveQueuesStatus"></div>
+        <script src="options.js"></script>
+    </body>
+</html>

@@ -1,0 +1,19 @@
+{
+    "name": "Autotask Alerts",
+    "description": "Provides desktop notifications for Autotask tickets either overdue or due within an hour.",
+    "icons": {
+        "128": "icon128.png",
+        "48": "icon48.png"
+    },
+    "version": "1.0",
+    "manifest_version": 3,
+    "permissions": ["alarms", "notifications", "storage", "tabs"],
+    "host_permissions": ["https://webservices5.autotask.net/*"],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "options_ui": {
+        "page": "options.html",
+        "open_in_tab": false
+    }
+}
