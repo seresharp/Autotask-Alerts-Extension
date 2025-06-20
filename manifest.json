@@ -7,7 +7,7 @@
     },
     "version": "1.0",
     "manifest_version": 3,
-    "permissions": ["alarms", "notifications", "storage", "tabs"],
+    "permissions": ["alarms", "notifications", "storage"],
     "host_permissions": ["https://webservices5.autotask.net/*"],
     "background": {
         "service_worker": "background.js"
