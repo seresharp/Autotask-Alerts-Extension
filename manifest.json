@@ -7,13 +7,26 @@
     },
     "version": "1.0",
     "manifest_version": 3,
-    "permissions": ["alarms", "notifications", "storage"],
-    "host_permissions": ["https://webservices5.autotask.net/*"],
+    "permissions": ["storage", "activeTab", "scripting"],
+    "host_permissions": ["https://*.autotask.net/*"],
     "background": {
         "service_worker": "background.js"
     },
     "options_ui": {
         "page": "options.html",
         "open_in_tab": false
-    }
+    },
+    "action": {
+        "default_icon": {
+            "128": "icon128.png",
+            "48": "icon48.png"
+        },
+        "default_title": "Autotask Alerts"
+    },
+    "web_accessible_resources": [
+        {
+            "resources": ["pip.html"],
+            "matches": ["https://*/*"]
+        }
+    ]
 }

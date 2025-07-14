@@ -6,7 +6,7 @@ const getQueuesFromResult = (result) => {
         if (field.name == "queueID") {
             queues = field.picklistValues.map(x => {return {name: x.label, id: parseInt(x.value)}});
         } else if (field.name == "status") {
-            statuses = field.picklistValues.map(x => {return {name: x.label, id: parseInt(x.value)}});
+            statuses = field.picklistValues.map(x => {return {name: x.label, id: parseInt(x.value)}}).filter(x => x.name != "Complete");
         }
     }
     
@@ -57,12 +57,13 @@ const populateQueuesList = (queues, statuses) => {
 };
 
 const saveAPICredentials = () => {
+    const region = document.getElementById("Region").value;
     const integration = document.getElementById("ApiIntegrationCode").value;
     const username = document.getElementById("UserName").value;
     const secret = document.getElementById("Secret").value;
     
     // Before saving, we want to run an API query to check that the credentials were entered correctly
-    fetch("https://webservices5.autotask.net/ATServicesRest/V1.0/Tickets/entityInformation/fields", {
+    fetch(`https://webservices${region}.autotask.net/ATServicesRest/V1.0/Tickets/entityInformation/fields`, {
         headers: {
             accept: "application/json",
             ApiIntegrationCode: integration,
@@ -76,6 +77,7 @@ const saveAPICredentials = () => {
         // If this succeeds, we can proceed with saving the api credentials to storage
         chrome.storage.sync.set({
             autotask: {
+                Region: region,
                 ApiIntegrationCode: integration,
                 UserName: username,
                 Secret: secret
@@ -118,42 +120,6 @@ const saveQueueSelection = () => {
     });
 };
 
-const saveWorkSchedule = () => {
-    // Check that user has finished entering times
-    if (document.getElementById("timeStart").value == "") {
-        document.getElementById("saveTimesStatus").innerText = "Please enter a start time before saving your schedule.";
-        return;
-    }
-    
-    if (document.getElementById("timeEnd").value == "") {
-        document.getElementById("saveTimesStatus").innerText = "Please enter an end time before saving your schedule.";
-        return;
-    }
-    
-    // Attempt saving to storage and notify user of the result
-    chrome.storage.sync.set({
-        schedule: {
-            days: {
-                sunday: document.getElementById("sundayCheckbox").checked,
-                monday: document.getElementById("mondayCheckbox").checked,
-                tuesday: document.getElementById("tuesdayCheckbox").checked,
-                wednesday: document.getElementById("wednesdayCheckbox").checked,
-                thursday: document.getElementById("thursdayCheckbox").checked,
-                friday: document.getElementById("fridayCheckbox").checked,
-                saturday: document.getElementById("saturdayCheckbox").checked
-            },
-            hours: {
-                start: document.getElementById("timeStart").value,
-                end: document.getElementById("timeEnd").value
-            }
-        }
-    }).then(() => {
-        document.getElementById("saveTimesStatus").innerText = "Work schedule saved to storage.";
-    }).catch(err => {
-        document.getElementById("saveTimesStatus").innerText = "Failed to save work schedule.";
-    });
-};
-
 const restoreAPICredentials = () => {
     // Helper method for displaying a message for failure to load credentials
     const showFailureMessage = (message) => {
@@ -171,12 +137,13 @@ const restoreAPICredentials = () => {
         }
 
         // Load stored credentials into HTML
+        document.getElementById("Region").value = data.autotask.Region;
         document.getElementById("ApiIntegrationCode").value = data.autotask.ApiIntegrationCode;
         document.getElementById("UserName").value = data.autotask.UserName;
         document.getElementById("Secret").value = data.autotask.Secret;
         
         // Make an API query to load queues/statuses from Autotask
-        fetch("https://webservices5.autotask.net/ATServicesRest/V1.0/Tickets/entityInformation/fields", {
+        fetch(`https://webservices${data.autotask.Region}.autotask.net/ATServicesRest/V1.0/Tickets/entityInformation/fields`, {
             headers: {
                 accept: "application/json",
                 ApiIntegrationCode: data.autotask.ApiIntegrationCode,
@@ -197,28 +164,9 @@ const restoreAPICredentials = () => {
         // Storage get failed
         showFailureMessage("Failed loading API credentials from storage.");
     });
-    
-    // Retrieve work schedule from chrome storage
-    chrome.storage.sync.get(["schedule"]).then(data => {
-        if (data.schedule) {
-            document.getElementById("sundayCheckbox").checked = data.schedule.days.sunday;
-            document.getElementById("mondayCheckbox").checked = data.schedule.days.monday;
-            document.getElementById("tuesdayCheckbox").checked = data.schedule.days.tuesday;
-            document.getElementById("wednesdayCheckbox").checked = data.schedule.days.wednesday;
-            document.getElementById("thursdayCheckbox").checked = data.schedule.days.thursday;
-            document.getElementById("fridayCheckbox").checked = data.schedule.days.friday;
-            document.getElementById("saturdayCheckbox").checked = data.schedule.days.saturday;
-            
-            document.getElementById("timeStart").value = data.schedule.hours.start;
-            document.getElementById("timeEnd").value = data.schedule.hours.end;
-        }
-    }).catch(err => {
-        document.getElementById("saveTimesStatus").innerText = "Failed loading work schedule from storage.";
-    });
 };
 
 // Add events
 document.addEventListener("DOMContentLoaded", restoreAPICredentials);
 document.getElementById("saveAPI").addEventListener("click", saveAPICredentials);
 document.getElementById("saveQueues").addEventListener("click", saveQueueSelection);
-document.getElementById("saveTimes").addEventListener("click", saveWorkSchedule);
